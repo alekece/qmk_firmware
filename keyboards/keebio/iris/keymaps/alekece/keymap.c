@@ -22,7 +22,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		LALT_T(KC_TAB),     KC_Q, KC_W,   KC_E,  KC_R,   KC_T,                    KC_Y,   KC_U, KC_I, KC_O,    KC_P,    RALT_T(KC_EQL),
 		LCTL_T(KC_ESC),     KC_A, KC_S,   KC_D,  KC_F,   KC_G,                    KC_H,   KC_J, KC_K, KC_L,    KC_SCLN, RCTL_T(KC_QUOT),
 		KC_LSFT,            KC_Z, KC_X,   KC_C,  KC_V,   KC_B, MO(LT_FN), KC_ENT, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
-		                          KC_CAPS, LT(LT_PROG,KC_SPC), MO(LT_FN), KC_ENT, KC_BSPC, KC_LGUI
+		              LALT_T(KC_CAPSLOCK), LT(LT_PROG,KC_SPC), MO(LT_FN), KC_ENT, KC_BSPC, KC_LGUI
 	),
 	[LT_PROG] = LAYOUT(
         KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -39,11 +39,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		                                        KC_NO, KC_NO, KC_NO, KC_TRNS, KC_DEL, KC_TRNS
 	),
 	[LT_CTRL] = LAYOUT(
-		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,               KC_NO,   RGB_M_P,  RGB_M_B, KC_M_SN, KC_M_K,   KC_NO,
-		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,               BL_DEC,  RGB_RMOD, RGB_HUD, RGB_VAD, RGB_SAD, KC_NO,
-		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,               BL_INC,  RGB_MOD,  RGB_HUI, RGB_VAI, RGB_SAI, KC_NO,
-		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, BL_TOGG, RGB_TOG,  KC_NO,   KC_NO,   KC_NO,   RESET,
-                                        KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO
+		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,               KC_NO,   RGB_M_P,  RGB_M_B, RGB_M_SN, RGB_M_K, KC_NO,
+		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,               BL_DEC,  RGB_RMOD, RGB_HUD, RGB_VAD,  RGB_SAD, KC_NO,
+		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,               BL_INC,  RGB_MOD,  RGB_HUI, RGB_VAI,  RGB_SAI, EEPROM_RESET,
+		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, BL_TOGG, RGB_TOG,  KC_NO,   KC_NO,    KC_NO,   RESET,
+                                    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO
     )
 };
 
@@ -59,5 +59,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
     }
 
+    return true;
+}
+
+const rgblight_segment_t PROGMEM capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, 6, HSV_RED},
+    {6, 6, HSV_RED}
+);
+
+// Now define the array of layers. Later layers take precedence
+const rgblight_segment_t* const PROGMEM rgb_layers[] = RGBLIGHT_LAYERS_LIST(
+    capslock_layer
+);
+
+void keyboard_post_init_user(void) {
+    // Enable the LED layers
+    rgblight_layers = rgb_layers;
+}
+
+bool led_update_user(led_t led_state) {
+    rgblight_set_layer_state(0, led_state.caps_lock);
     return true;
 }

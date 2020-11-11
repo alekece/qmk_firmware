@@ -19,20 +19,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
- 
-// #define USE_I2C
-#define EE_HANDS
+#define NO_ACTION_ONESHOT
 
-#undef RGBLED_NUM
-#define RGBLIGHT_SLEEP // Turn off RGB light when host is asleep.
-#define RGBLIGHT_ANIMATIONS
-#define RGBLED_NUM 12
-#define RGBLIGHT_HUE_STEP 12
-#define RGBLIGHT_SAT_STEP 25
-#define RGBLIGHT_VAL_STEP 12
+#undef RGBLIGHT_ANIMATIONS
+#define RGBLIGHT_SLEEP
+#define RGBLIGHT_EFFECT_BREATHING
+#define RGBLIGHT_EFFECT_SNAKE
+#define RGBLIGHT_EFFECT_KNIGHT
+#define RGBLIGHT_LAYERS
 
-#define TAPPING_TERM 150
-#define RETRO_TAPPING
+#define TAPPING_TERM 200
+//#define RETRO_TAPPING
 #define PERMISSIVE_HOLD
 
 #define MOUSEKEY_DELAY              100
